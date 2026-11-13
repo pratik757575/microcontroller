@@ -1,0 +1,69 @@
+#include <reg51.h>
+
+#define MOTOR P2
+
+void delay(unsigned int count)
+{
+    unsigned int i, j;
+
+    for(i=0; i<count; i++)
+        for(j=0; j<1275; j++);
+}
+
+// Clockwise rotation
+void clockwise_step(void)
+{
+    MOTOR = 0x09;
+    delay(5);
+
+    MOTOR = 0x0C;
+    delay(5);
+
+    MOTOR = 0x06;
+    delay(5);
+
+    MOTOR = 0x03;
+    delay(5);
+}
+
+// Anticlockwise rotation
+void anticlockwise_step(void)
+{
+    MOTOR = 0x03;
+    delay(5);
+
+    MOTOR = 0x06;
+    delay(5);
+
+    MOTOR = 0x0C;
+    delay(5);
+
+    MOTOR = 0x09;
+    delay(5);
+}
+
+void main(void)
+{
+    unsigned int i;
+
+    while(1)
+    {
+        // Clockwise
+        for(i=0; i<50; i++)
+        {
+            clockwise_step();
+        }
+
+        MOTOR = 0x00;
+        delay(500);
+
+        // Anticlockwise
+        for(i=0; i<50; i++)
+        {
+            anticlockwise_step();
+        }
+
+        MOTOR = 0x00;
+        delay(500);
+    }
+}

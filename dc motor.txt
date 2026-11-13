@@ -1,0 +1,94 @@
+#include <reg51.h>
+
+sbit IN1 = P2^0;
+sbit IN2 = P2^1;
+sbit EN1 = P2^2;
+
+void delay_us(unsigned int t)
+{
+    unsigned int i;
+
+    for(i=0; i<t; i++);
+}
+
+// PWM generation
+void pwm(unsigned char duty)
+{
+    unsigned char i;
+
+    for(i=0; i<100; i++)
+    {
+        if(i < duty)
+            EN1 = 1;
+        else
+            EN1 = 0;
+
+        delay_us(10);
+    }
+}
+
+// Clockwise
+void clockwise(void)
+{
+    IN1 = 1;
+    IN2 = 0;
+}
+
+// Anticlockwise
+void anticlockwise(void)
+{
+    IN1 = 0;
+    IN2 = 1;
+}
+
+// Stop motor
+void motor_stop(void)
+{
+    IN1 = 0;
+    IN2 = 0;
+    EN1 = 0;
+}
+
+void main(void)
+{
+    unsigned int j;
+
+    while(1)
+    {
+        // 25% speed
+        clockwise();
+
+        for(j=0; j<200; j++)
+            pwm(25);
+
+        motor_stop();
+        delay_us(5000);
+
+        // 50% speed
+        clockwise();
+
+        for(j=0; j<200; j++)
+            pwm(50);
+
+        motor_stop();
+        delay_us(5000);
+
+        // 75% speed
+        clockwise();
+
+        for(j=0; j<200; j++)
+            pwm(75);
+
+        motor_stop();
+        delay_us(5000);
+
+        // Anticlockwise at 50%
+        anticlockwise();
+
+        for(j=0; j<200; j++)
+            pwm(50);
+
+        motor_stop();
+        delay_us(5000);
+    }
+}

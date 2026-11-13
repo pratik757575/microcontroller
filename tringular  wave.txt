@@ -1,0 +1,31 @@
+#include <reg51.h>
+
+#define DAC P1
+
+void delay(unsigned int count)
+{
+    unsigned int i, j;
+
+    for(i=0; i<count; i++)
+        for(j=0; j<20; j++);
+}
+
+void main(void)
+{
+    unsigned int i;
+
+    while(1)
+    {
+        for(i=0; i<=255; i++)
+        {
+            DAC = (unsigned char)i;
+            delay(1);
+        }
+
+        for(i=255; i>0; i--)
+        {
+            DAC = (unsigned char)i;
+            delay(1);
+        }
+    }
+}
